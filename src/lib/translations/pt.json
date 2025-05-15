@@ -39,7 +39,8 @@
       "Preciso de ajuda com análise de dados",
       "Como é que a IA pode ajudar o meu negócio?"
     ],
-    "suggestions": "Sugestões"
+    "suggestions": "Sugestões",
+    "disclaimer": "O Chat pode cometer erros. Considere verificar informações importantes."
   },
   "settings": {
     "title": "Definições",

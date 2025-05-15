@@ -2,7 +2,7 @@
   "common": {
     "loading": "Cargando...",
     "error": "Ocurrió un error",
-    "retry": "Reintentar",
+    "retry": "Intentar de nuevo",
     "save": "Guardar",
     "cancel": "Cancelar",
     "delete": "Eliminar",
@@ -35,12 +35,12 @@
     "like": "Me gusta",
     "dislike": "No me gusta",
     "comment": "Comentar",
-    "greeting": "¡Hola! ¿En qué puedo ayudarte hoy?",
+    "greeting": "¡Hola! ¿Cómo puedo ayudarte hoy?",
     "greetingLoading": "Cargando saludo...",
     "voiceMode": {
-      "idle": "Modo Voz",
+      "idle": "Modo de Voz",
       "recording": "Grabando...",
-      "aiSpeaking": "IA Hablando..."
+      "aiSpeaking": "IA hablando..."
     },
     "assistantTitle": "Asistente IA",
     "tooltips": [
@@ -48,12 +48,13 @@
       "Necesito un MVP para mi idea",
       "Quiero mejorar mi SEO y marketing digital",
       "Necesito un sitio web para mi negocio",
-      "¿Cómo puedo optimizar mi presencia online?",
+      "¿Cómo puedo optimizar mi presencia en línea?",
       "Quiero desarrollar una aplicación móvil",
-      "Necesito ayuda con el análisis de datos",
+      "Necesito ayuda con análisis de datos",
       "¿Cómo puede la IA ayudar a mi negocio?"
     ],
     "suggestions": "Sugerencias",
+    "disclaimer": "El Chat puede cometer errores. Considere verificar información importante.",
     "rename": "Renombrar",
     "export": "Exportar",
     "import": "Importar"

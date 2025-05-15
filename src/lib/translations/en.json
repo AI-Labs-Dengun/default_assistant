@@ -2,7 +2,7 @@
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",
-    "retry": "Retry",
+    "retry": "Try again",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -40,6 +40,7 @@
       "How can AI help my business?"
     ],
     "suggestions": "Suggestions",
+    "disclaimer": "Chat may make mistakes. Consider verifying important information.",
     "clearChat": "Clear Chat",
     "exportChat": "Export Chat",
     "importChat": "Import Chat",

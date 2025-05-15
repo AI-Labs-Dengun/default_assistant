@@ -687,12 +687,20 @@ const ChatComponent = () => {
       }
     };
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && voiceModalOpen) {
+        handleVoiceModalClose();
+      }
+    };
+
     if (voiceModalOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [voiceModalOpen]);
 
@@ -990,6 +998,9 @@ const ChatComponent = () => {
               </div>
             )}
           </form>
+          <div className="text-center text-sm text-white/60 mt-2">
+            {t('chat.disclaimer')}
+          </div>
         </footer>
       </div>
       <CommentModal

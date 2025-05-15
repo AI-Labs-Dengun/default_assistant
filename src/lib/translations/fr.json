@@ -56,7 +56,8 @@
     "suggestions": "Suggestions",
     "rename": "Renommer",
     "export": "Exporter",
-    "import": "Importer"
+    "import": "Importer",
+    "disclaimer": "Le Chat peut commettre des erreurs. Veuillez vérifier les informations importantes."
   },
   "settings": {
     "title": "Paramètres",

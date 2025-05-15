@@ -32,7 +32,7 @@
     "tooltips": [
       "Wie kann ich mein Startup skalieren?",
       "Ich brauche ein MVP für meine Idee",
-      "Ich möchte mein SEO und digitales Marketing verbessern",
+      "Ich möchte mein SEO und Digital Marketing verbessern",
       "Ich brauche eine Website für mein Unternehmen",
       "Wie kann ich meine Online-Präsenz optimieren?",
       "Ich möchte eine mobile App entwickeln",
@@ -40,6 +40,7 @@
       "Wie kann KI meinem Unternehmen helfen?"
     ],
     "suggestions": "Vorschläge",
+    "disclaimer": "Der Chat kann Fehler machen. Bitte überprüfen Sie wichtige Informationen.",
     "clearChat": "Chat löschen",
     "exportChat": "Chat exportieren",
     "importChat": "Chat importieren",
