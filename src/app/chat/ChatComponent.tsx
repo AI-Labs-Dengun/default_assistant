@@ -687,12 +687,20 @@ const ChatComponent = () => {
       }
     };
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && voiceModalOpen) {
+        handleVoiceModalClose();
+      }
+    };
+
     if (voiceModalOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [voiceModalOpen]);
 
