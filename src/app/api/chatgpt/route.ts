@@ -30,7 +30,7 @@ ${instructions}
 ${knowledge}
 
 IMPORTANTE:
-- Responda sempre em português
+- Detecte e responda na mesma língua que o usuário utiliza
 - Seja criativo e original em suas respostas
 - Use o tom e estilo definidos nas instruções
 - Incorpore informações relevantes da base de conhecimento
