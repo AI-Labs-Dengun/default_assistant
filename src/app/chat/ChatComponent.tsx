@@ -222,7 +222,7 @@ const ChatComponent = () => {
     }
   };
 
-  const playTTS = async (text: string, messageId: string, onEnd?: () => void) => {
+  const playTTS = async (text: string, messageId: string, language?: string) => {
     if (typeof window === 'undefined') return;
     
     const loadingToast = showToast.loading('Carregando áudio...');
@@ -235,7 +235,10 @@ const ChatComponent = () => {
       const res = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ 
+          text,
+          language: language || 'pt-pt' // Usa o idioma detectado ou pt-pt como fallback
+        }),
       });
       if (!res.ok) throw new Error('TTS failed');
       const audioBlob = await res.blob();
@@ -247,7 +250,6 @@ const ChatComponent = () => {
         setIsAudioPlaying(false);
         setIsAudioPaused(false);
         setCurrentPlayingMessageId(null);
-        if (onEnd) onEnd();
       };
       
       audio.onplay = () => {
@@ -269,7 +271,6 @@ const ChatComponent = () => {
       setIsAudioPaused(false);
       setCurrentPlayingMessageId(null);
       showToast.error('Erro ao carregar áudio');
-      if (onEnd) onEnd();
     }
   };
 
@@ -490,6 +491,13 @@ const ChatComponent = () => {
     console.log('startRecording called');
     if (typeof window === 'undefined') return;
     try {
+      // Pausa o áudio atual se estiver tocando
+      if (audioRef.current && !audioRef.current.paused) {
+        audioRef.current.pause();
+        setIsAudioPlaying(false);
+        setIsAudioPaused(true);
+      }
+
       setVoiceModalMode('recording');
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
@@ -513,6 +521,152 @@ const ChatComponent = () => {
       mediaRecorder.start();
     } catch (err) {
       console.error('Recording error:', err);
+      setVoiceModalMode('ready-to-record');
+    }
+  };
+
+  const hasAudioContent = async (audioBlob: Blob): Promise<boolean> => {
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const arrayBuffer = await audioBlob.arrayBuffer();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+      
+      // Verifica se há dados de áudio não-zero
+      const channelData = audioBuffer.getChannelData(0);
+      const hasSound = channelData.some(sample => Math.abs(sample) > 0.01); // threshold de 0.01
+      
+      audioContext.close();
+      return hasSound;
+    } catch (err) {
+      console.error('Erro ao verificar conteúdo do áudio:', err);
+      return false;
+    }
+  };
+
+  const handleAudioSubmit = async (audioBlob: Blob) => {
+    setVoiceModalMode('thinking');
+    try {
+      console.log('Iniciando processamento do áudio...');
+      
+      // Verifica se há conteúdo de áudio
+      const hasSound = await hasAudioContent(audioBlob);
+      console.log('Verificação de som:', hasSound);
+      
+      if (!hasSound) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: 'bot-' + Date.now(),
+            content: 'Não foi detectado nenhum som na gravação. Por favor, tente novamente.',
+            user: 'bot',
+            created_at: new Date().toISOString(),
+          },
+        ]);
+        setVoiceModalMode('ready-to-record');
+        return;
+      }
+
+      // Prepara o FormData para transcrição
+      const transcribeFormData = new FormData();
+      transcribeFormData.append('audio', audioBlob, 'audio.wav');
+      
+      console.log('Enviando áudio para transcrição...');
+      
+      // Faz a transcrição
+      const transcribeRes = await fetch('/api/transcribe', {
+        method: 'POST',
+        body: transcribeFormData
+      });
+      
+      console.log('Status da resposta de transcrição:', transcribeRes.status);
+      
+      if (!transcribeRes.ok) {
+        const errorText = await transcribeRes.text();
+        console.error('Erro na transcrição:', errorText);
+        throw new Error(`Falha na transcrição: ${errorText}`);
+      }
+      
+      const data = await transcribeRes.json();
+      console.log('Resposta completa da transcrição:', data);
+      
+      if (!data.text) {
+        console.error('Nenhum texto retornado da transcrição');
+        throw new Error('Transcrição vazia');
+      }
+
+      console.log('Texto transcrito:', data.text);
+
+      const userMsg = {
+        id: 'user-' + Date.now(),
+        content: data.text,
+        user: 'me' as 'me',
+        created_at: new Date().toISOString(),
+      };
+      
+      console.log('Adicionando mensagem do usuário:', userMsg);
+      setMessages((prev) => [...prev, userMsg]);
+      setLoading(true);
+      
+      try {
+        console.log('Enviando para o ChatGPT...');
+        const res = await fetch('/api/chatgpt', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            message: data.text,
+            conversationHistory: messages.map(msg => ({
+              user: msg.user,
+              content: msg.content
+            }))
+          }),
+        });
+        
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error('Erro no ChatGPT:', errorText);
+          throw new Error(`Falha na resposta do ChatGPT: ${errorText}`);
+        }
+        
+        const aiData = await res.json();
+        console.log('Resposta do ChatGPT:', aiData);
+        
+        const botResponse = aiData.reply || 'Desculpe, não consegui responder agora.';
+        const botMsgId = 'bot-' + Date.now();
+        
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: botMsgId,
+            content: botResponse,
+            user: 'bot',
+            created_at: new Date().toISOString(),
+          },
+        ]);
+        
+        // Reproduz automaticamente o áudio da resposta do bot
+        console.log('Iniciando reprodução do áudio da resposta...');
+        await playTTS(botResponse, botMsgId);
+        
+        setVoiceModalMode('ready-to-record');
+      } catch (err) {
+        console.error('Erro no processamento do ChatGPT:', err);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: 'bot-error-' + Date.now(),
+            content: 'Erro ao conectar ao ChatGPT.',
+            user: 'bot',
+            created_at: new Date().toISOString(),
+          },
+        ]);
+        setVoiceModalMode('ready-to-record');
+      } finally {
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error('Erro no processamento do áudio:', err);
       setVoiceModalMode('ready-to-record');
     }
   };
@@ -606,72 +760,6 @@ const ChatComponent = () => {
       ]);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleAudioSubmit = async (audioBlob: Blob) => {
-    setVoiceModalMode('thinking');
-    try {
-      const formData = new FormData();
-      formData.append('audio', audioBlob, 'audio.wav');
-      const res = await fetch('/api/transcribe', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      console.log('Transcription result:', data);
-      if (data.text) {
-        const userMsg = {
-          id: 'user-' + Date.now(),
-          content: data.text,
-          user: 'me' as 'me',
-          created_at: new Date().toISOString(),
-        };
-        setMessages((prev) => [...prev, userMsg]);
-        setLoading(true);
-        try {
-          const res = await fetch('/api/chatgpt', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              message: data.text,
-              conversationHistory: messages.map(msg => ({
-                user: msg.user,
-                content: msg.content
-              }))
-            }),
-          });
-          const aiData = await res.json();
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: 'bot-' + Date.now(),
-              content: aiData.reply || 'Desculpe, não consegui responder agora.',
-              user: 'bot',
-              created_at: new Date().toISOString(),
-            },
-          ]);
-          setVoiceModalMode('ready-to-record');
-        } catch (err) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: 'bot-error-' + Date.now(),
-              content: 'Erro ao conectar ao ChatGPT.',
-              user: 'bot',
-              created_at: new Date().toISOString(),
-            },
-          ]);
-          setVoiceModalMode('ready-to-record');
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setVoiceModalMode('ready-to-record');
-      }
-    } catch (err) {
-      console.error('Transcription error:', err);
-      setVoiceModalMode('ready-to-record');
     }
   };
 
@@ -836,7 +924,7 @@ const ChatComponent = () => {
                                   toggleAudioPlayback();
                                 } else {
                                   setTtsLoadingMsgId(msg.id);
-                                  await playTTS(msg.content, msg.id, () => setTtsLoadingMsgId(null));
+                                  await playTTS(msg.content, msg.id, language);
                                   setTtsLoadingMsgId(null);
                                 }
                               }}
