@@ -91,7 +91,12 @@
     "confirmEmailError": "Veuillez confirmer votre e-mail avant de continuer.",
     "invalidCredentials": "Identifiants de connexion invalides",
     "userAlreadyRegistered": "Utilisateur déjà enregistré",
-    "emailAlreadyExists": "Cette adresse e-mail est déjà enregistrée. Veuillez utiliser une autre adresse e-mail ou vous connecter avec votre compte existant."
+    "emailAlreadyExists": "Cette adresse e-mail est déjà enregistrée. Veuillez utiliser une autre adresse e-mail ou vous connecter avec votre compte existant.",
+    "emailNotFound": "Aucun compte trouvé avec cet e-mail",
+    "wrongPassword": "Le mot de passe que vous avez saisi est incorrect. Veuillez réessayer.",
+    "loginError": "Impossible de se connecter. Veuillez vérifier vos identifiants et réessayer.",
+    "invalidPassword": "Mot de passe incorrect",
+    "genericError": "Une erreur s'est produite lors de la tentative de connexion"
   },
   "voice": {
     "title": "Enregistrement Vocal",

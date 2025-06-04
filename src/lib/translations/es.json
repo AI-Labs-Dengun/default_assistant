@@ -99,7 +99,11 @@
     "confirmEmailError": "Por favor, confirma tu correo electrónico antes de continuar.",
     "invalidCredentials": "Credenciales de inicio de sesión inválidas",
     "userAlreadyRegistered": "Usuario ya registrado",
-    "emailAlreadyExists": "Esta dirección de correo electrónico ya está registrada. Por favor, utiliza otra dirección de correo electrónico o inicia sesión con tu cuenta existente."
+    "emailAlreadyExists": "Esta dirección de correo electrónico ya está registrada. Por favor, utiliza otra dirección de correo electrónico o inicia sesión con tu cuenta existente.",
+    "emailNotFound": "No se encontró ninguna cuenta con este correo electrónico",
+    "wrongPassword": "La contraseña que ingresó es incorrecta. Por favor, inténtelo de nuevo.",
+    "loginError": "No se pudo iniciar sesión. Por favor, verifique sus credenciales e inténtelo de nuevo.",
+    "genericError": "Ocurrió un error al intentar iniciar sesión"
   },
   "voice": {
     "title": "Grabación de Voz",

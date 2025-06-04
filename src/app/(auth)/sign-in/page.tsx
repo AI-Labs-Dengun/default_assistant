@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useLanguage } from '../../../lib/LanguageContext';
 import { useTranslation } from '../../../lib/i18n';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { showAuthNotification } from '../../../lib/auth-notifications';
+import showToast from '../../../lib/toast';
 
 export default function SignIn() {
   const { dark, toggleTheme } = useTheme();
@@ -33,13 +33,13 @@ export default function SignIn() {
       const { error } = await signIn(email, password);
       
       if (error) {
-        showAuthNotification.signInError(language, error.message);
+        showToast.error(t('auth.loginError'));
       } else {
-        showAuthNotification.signInSuccess(language);
+        showToast.success(t('auth.signInSuccess'));
         router.push('/chat');
       }
     } catch (err: any) {
-      showAuthNotification.signInError(language, err.message);
+      showToast.error(t('auth.loginError'));
     } finally {
       setLoading(false);
     }

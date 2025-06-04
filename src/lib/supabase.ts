@@ -13,7 +13,7 @@ export const db = {
   users: {
     async getProfile(userId: string) {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('default_profiles')
         .select('*')
         .eq('id', userId)
         .single();
@@ -24,7 +24,7 @@ export const db = {
     
     async updateProfile(userId: string, updates: any) {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('default_profiles')
         .update(updates)
         .eq('id', userId);
       
@@ -37,7 +37,7 @@ export const db = {
   chats: {
     async getMessages(chatId: string) {
       const { data, error } = await supabase
-        .from('messages')
+        .from('default_messages')
         .select('*')
         .eq('chat_id', chatId)
         .order('created_at', { ascending: true });
@@ -48,7 +48,7 @@ export const db = {
     
     async sendMessage(chatId: string, userId: string, content: string) {
       const { data, error } = await supabase
-        .from('messages')
+        .from('default_messages')
         .insert([
           { chat_id: chatId, user_id: userId, content }
         ]);
