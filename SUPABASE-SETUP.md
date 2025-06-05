@@ -37,31 +37,31 @@ To enable email/password authentication:
 For better security, you should set up Row Level Security policies:
 
 1. Go to Authentication > Policies
-2. For the `profiles` table, add a policy that allows users to read and update only their own profile:
+2. For the `default_profiles` table, add a policy that allows users to read and update only their own profile:
 
 ```sql
 -- Allow users to read their own profile
 CREATE POLICY "Users can read their own profile"
-ON profiles FOR SELECT
+ON default_profiles FOR SELECT
 USING (auth.uid() = id);
 
 -- Allow users to update their own profile
 CREATE POLICY "Users can update their own profile"
-ON profiles FOR UPDATE
+ON default_profiles FOR UPDATE
 USING (auth.uid() = id);
 ```
 
-3. For the `messages` table, add policies that allow users to read messages in chats they're part of and insert their own messages:
+3. For the `default_messages` table, add policies that allow users to read messages in chats they're part of and insert their own messages:
 
 ```sql
 -- Allow users to read messages in chats they're part of
 CREATE POLICY "Users can read messages in their chats"
-ON messages FOR SELECT
-USING (true); -- In a real app, you'd check if the user is part of the chat
+ON default_messages FOR SELECT
+USING (true);
 
 -- Allow users to insert their own messages
 CREATE POLICY "Users can insert their own messages"
-ON messages FOR INSERT
+ON default_messages FOR INSERT
 WITH CHECK (auth.uid() = user_id);
 ```
 

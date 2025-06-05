@@ -100,7 +100,11 @@
     "emailPlaceholder": "john@example.com",
     "passwordPlaceholder": "••••••••",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "emailNotFound": "No account found with this email",
+    "wrongPassword": "The password you entered is incorrect. Please try again.",
+    "loginError": "Unable to sign in. Please check your credentials and try again.",
+    "genericError": "An error occurred while trying to sign in"
   },
   "voice": {
     "title": "Voice Recording",

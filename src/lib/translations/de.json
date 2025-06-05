@@ -100,7 +100,11 @@
     "emailPlaceholder": "max@beispiel.de",
     "passwordPlaceholder": "••••••••",
     "showPassword": "Passwort anzeigen",
-    "hidePassword": "Passwort ausblenden"
+    "hidePassword": "Passwort ausblenden",
+    "emailNotFound": "Kein Konto mit dieser E-Mail-Adresse gefunden",
+    "wrongPassword": "Das eingegebene Passwort ist falsch. Bitte versuchen Sie es erneut.",
+    "loginError": "Anmeldung nicht möglich. Bitte überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut.",
+    "genericError": "Ein Fehler ist beim Anmelden aufgetreten"
   },
   "voice": {
     "title": "Sprachaufnahme",

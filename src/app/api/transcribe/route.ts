@@ -21,10 +21,11 @@ export async function POST(req: Request) {
       file: audioFile,
       model: 'whisper-1',
       response_format: 'json',
-      language: 'pt',
     });
 
-    return NextResponse.json({ text: transcription.text });
+    return NextResponse.json({ 
+      text: transcription.text
+    });
   } catch (error) {
     console.error('Transcription error:', error);
     return NextResponse.json({ error: 'Failed to transcribe audio' }, { status: 500 });

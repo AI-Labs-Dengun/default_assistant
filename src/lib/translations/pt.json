@@ -50,6 +50,9 @@
     "lightMode": "Modo Claro"
   },
   "auth": {
+    "emailNotFound": "Não existe nenhuma conta associada a este e-mail",
+    "wrongPassword": "A palavra-passe introduzida está incorreta. Por favor, tente novamente.",
+    "loginError": "Não foi possível iniciar sessão. Por favor, verifique os seus dados e tente novamente.",
     "signIn": "Iniciar sessão",
     "signUp": "Registar",
     "email": "E-mail",
@@ -82,7 +85,8 @@
     "hidePassword": "Ocultar palavra-passe",
     "namePlaceholder": "João Silva",
     "emailPlaceholder": "joao@exemplo.com",
-    "passwordPlaceholder": "••••••••"
+    "passwordPlaceholder": "••••••••",
+    "genericError": "Ocorreu um erro ao tentar iniciar sessão"
   },
   "voice": {
     "title": "Gravação de Voz",

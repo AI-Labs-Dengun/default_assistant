@@ -13,7 +13,7 @@ const createTablesSQL = `
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create profiles table
-CREATE TABLE IF NOT EXISTS profiles (
+CREATE TABLE IF NOT EXISTS default_profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id),
   name TEXT,
   email TEXT,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS profiles (
 );
 
 -- Create chats table
-CREATE TABLE IF NOT EXISTS chats (
+CREATE TABLE IF NOT EXISTS default_chats (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS chats (
 );
 
 -- Create messages table
-CREATE TABLE IF NOT EXISTS messages (
+CREATE TABLE IF NOT EXISTS default_messages (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   chat_id UUID NOT NULL,
   user_id UUID NOT NULL REFERENCES auth.users(id),
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS messages (
 );
 
 -- Create a demo chat with a proper UUID
-INSERT INTO chats (id, name)
+INSERT INTO default_chats (id, name)
 VALUES (uuid_generate_v4(), 'Demo Chat')
 ON CONFLICT (id) DO NOTHING;
 `;
